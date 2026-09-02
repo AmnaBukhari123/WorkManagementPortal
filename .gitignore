@@ -1,0 +1,27 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# EF Core
+**/Migrations/*.cs.bak
+
+# Secrets — NEVER commit real connection strings/keys
+appsettings.Development.json
+appsettings.Local.json
+**/appsettings.Production.json
+
+# Angular / Node
+node_modules/
+dist/
+.angular/
+
+# IDE
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

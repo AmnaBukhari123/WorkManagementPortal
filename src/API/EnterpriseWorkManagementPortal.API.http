@@ -1,0 +1,6 @@
+@EnterpriseWorkManagementPortal.API_HostAddress = http://localhost:5090
+
+GET {{EnterpriseWorkManagementPortal.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
