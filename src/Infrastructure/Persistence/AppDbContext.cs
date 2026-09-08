@@ -1,10 +1,11 @@
 // src/Infrastructure/Persistence/AppDbContext.cs
 using Microsoft.EntityFrameworkCore;
 using EnterpriseWorkManagementPortal.Domain.Entities;
+using EnterpriseWorkManagementPortal.Application.Interfaces;
 
 namespace EnterpriseWorkManagementPortal.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IApplicationDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

@@ -1,0 +1,13 @@
+// src/Application/Interfaces/ITaskItemService.cs
+using EnterpriseWorkManagementPortal.Application.DTOs;
+using EnterpriseWorkManagementPortal.Application.Common;
+namespace EnterpriseWorkManagementPortal.Application.Interfaces;
+
+public interface ITaskItemService
+{
+    Task<TaskItemDto?> GetByIdAsync(int id);
+    Task<PagedResult<TaskItemDto>> GetByProjectIdAsync(int projectId, TaskItemQueryParams query);
+    Task<TaskItemDto> CreateAsync(CreateTaskItemDto dto);
+    Task UpdateAsync(int id, UpdateTaskItemDto dto);
+    Task DeleteAsync(int id);
+}

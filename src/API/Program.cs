@@ -1,18 +1,19 @@
-// src/API/Program.cs
-using EnterpriseWorkManagementPortal.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using EnterpriseWorkManagementPortal.Infrastructure;
+using EnterpriseWorkManagementPortal.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
