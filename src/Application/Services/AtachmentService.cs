@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using EnterpriseWorkManagementPortal.Application.DTOs;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EnterpriseWorkManagementPortal.Application.Services;
 
@@ -10,11 +11,13 @@ public class AttachmentService : IAttachmentService
 {
     private readonly IApplicationDbContext _context;
     private readonly IFileStorageService _fileStorage;
+    private readonly ILogger<AttachmentService> _logger;
 
-    public AttachmentService(IApplicationDbContext context, IFileStorageService fileStorage)
+    public AttachmentService(IApplicationDbContext context, IFileStorageService fileStorage, ILogger<AttachmentService> logger)
     {
         _context = context;
         _fileStorage = fileStorage;
+        _logger = logger;
     }
 
     public async Task<List<AttachmentDto>> GetByTaskItemIdAsync(int taskItemId) =>
@@ -37,6 +40,7 @@ public class AttachmentService : IAttachmentService
         _context.Attachments.Add(attachment);
         await _context.SaveChangesAsync();
         await _context.Entry(attachment).Reference(a => a.UploadedBy).LoadAsync();
+        _logger.LogInformation("File {FileName} ({Size} bytes) uploaded to TaskItem {TaskItemId}", fileName, fileSizeBytes, taskItemId);
         return Map(attachment);
     }
 
@@ -48,6 +52,7 @@ public class AttachmentService : IAttachmentService
         await _fileStorage.DeleteFileAsync(attachment.FilePath);
         _context.Attachments.Remove(attachment);
         await _context.SaveChangesAsync();
+        _logger.LogWarning("Attachment {AttachmentId} deleted", id);
     }
 
     private static AttachmentDto Map(Attachment a) => new(a.Id, a.FileName, a.FileSizeBytes, a.UploadedBy?.FullName ?? "", a.UploadedAt);

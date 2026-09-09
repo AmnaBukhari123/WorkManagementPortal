@@ -5,13 +5,20 @@ using EnterpriseWorkManagementPortal.Application.Common;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Domain.Entities;
 using EnterpriseWorkManagementPortal.Domain.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace EnterpriseWorkManagementPortal.Application.Services;
 
 public class TaskItemService : ITaskItemService
 {
     private readonly IApplicationDbContext _context;
-    public TaskItemService(IApplicationDbContext context) => _context = context;
+    private readonly ILogger<TaskItemService> _logger;
+    
+    public TaskItemService(IApplicationDbContext context, ILogger<TaskItemService> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
 
     public async Task<TaskItemDto?> GetByIdAsync(int id)
     {
@@ -60,6 +67,7 @@ public class TaskItemService : ITaskItemService
 
         _context.TaskItems.Add(task);
         await _context.SaveChangesAsync();
+        _logger.LogInformation("TaskItem {TaskId} created in Project {ProjectId}", task.Id, task.ProjectId);
         return Map(task);
     }
 
@@ -75,6 +83,7 @@ public class TaskItemService : ITaskItemService
         if (dto.DueDate.HasValue) task.DueDate = dto.DueDate;
 
         await _context.SaveChangesAsync();
+        _logger.LogInformation("TaskItem {TaskId} updated", id);
     }
 
     public async Task DeleteAsync(int id)
@@ -83,6 +92,7 @@ public class TaskItemService : ITaskItemService
             ?? throw new KeyNotFoundException($"TaskItem {id} not found.");
         _context.TaskItems.Remove(task);
         await _context.SaveChangesAsync();
+        _logger.LogWarning("TaskItem {TaskId} deleted", id);
     }
 
     private static TaskItemDto Map(TaskItem t) => new(
