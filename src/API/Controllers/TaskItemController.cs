@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 // using EnterpriseWorkManagementPortal.Application.Common; 
 
 namespace EnterpriseWorkManagementPortal.API.Controllers;
@@ -35,6 +36,7 @@ public class TaskItemsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

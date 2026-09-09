@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EnterpriseWorkManagementPortal.API.Controllers;
 
@@ -22,6 +23,7 @@ public class CommentsController : ControllerBase
         return Ok(await _commentService.CreateAsync(dto));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("comments/{id}")]
     public async Task<IActionResult> Delete(int id)
     {

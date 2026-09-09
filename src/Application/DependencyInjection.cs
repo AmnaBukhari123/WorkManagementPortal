@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IAuditLogService, AuditLogService>();
+        services.AddScoped<IAuthService, AuthService>();
         return services;
     }
 }
