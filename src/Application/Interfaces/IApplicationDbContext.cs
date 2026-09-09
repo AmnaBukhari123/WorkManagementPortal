@@ -14,6 +14,7 @@ public interface IApplicationDbContext
     DbSet<Comment> Comments { get; }
     DbSet<Attachment> Attachments { get; }
     DbSet<AuditLog> AuditLogs { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class; 
 }

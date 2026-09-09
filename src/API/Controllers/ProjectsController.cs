@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EnterpriseWorkManagementPortal.API.Controllers;
 
@@ -32,6 +33,7 @@ public class ProjectsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

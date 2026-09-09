@@ -16,6 +16,7 @@ public class AppDbContext : DbContext, IApplicationDbContext
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Attachment> Attachments { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     private int? _currentUserId;
     public void SetCurrentUser(int userId) => _currentUserId = userId;
@@ -74,7 +75,13 @@ public class AppDbContext : DbContext, IApplicationDbContext
         modelBuilder.Entity<AuditLog>()
             .HasOne(a => a.ChangedBy).WithMany()
             .HasForeignKey(a => a.ChangedByUserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(rt => rt.User).WithMany()
+            .HasForeignKey(rt => rt.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -89,7 +96,7 @@ public class AppDbContext : DbContext, IApplicationDbContext
             {
                 EntityName = entry.Entity.GetType().Name,
                 Action = entry.State.ToString(),
-                ChangedByUserId = _currentUserId ?? 0,
+                ChangedByUserId = _currentUserId,
                 ChangedAt = DateTime.UtcNow
             });
         }
