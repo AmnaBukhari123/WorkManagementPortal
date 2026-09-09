@@ -4,13 +4,19 @@ using EnterpriseWorkManagementPortal.Application.DTOs;
 using EnterpriseWorkManagementPortal.Application.Common;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EnterpriseWorkManagementPortal.Application.Services;
 
 public class ProjectService : IProjectService
 {
     private readonly IApplicationDbContext _context;
-    public ProjectService(IApplicationDbContext context) => _context = context;
+    private readonly ILogger<ProjectService> _logger;
+    public ProjectService(IApplicationDbContext context, ILogger<ProjectService> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
 
     public async Task<ProjectDto?> GetByIdAsync(int id)
     {
@@ -46,6 +52,7 @@ public class ProjectService : IProjectService
         _context.Projects.Add(project);
         await _context.SaveChangesAsync();
         await _context.Entry(project).Reference(p => p.CreatedBy).LoadAsync();  // load for the Map() call below
+        _logger.LogInformation("Project {ProjectId} created by User {UserId}", project.Id, dto.CreatedByUserId);
         return Map(project);
     }
 
@@ -63,6 +70,7 @@ public class ProjectService : IProjectService
         var project = await _context.Projects.FindAsync(id) ?? throw new KeyNotFoundException($"Project {id} not found.");
         _context.Projects.Remove(project);
         await _context.SaveChangesAsync();
+        _logger.LogWarning("Project {ProjectId} deleted", id);
     }
 
     private static ProjectDto Map(Project p) => new(p.Id, p.Title, p.Description, p.IsArchived, p.CreatedBy?.FullName ?? "", p.CreatedAt);

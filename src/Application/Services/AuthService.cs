@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using EnterpriseWorkManagementPortal.Application.DTOs;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EnterpriseWorkManagementPortal.Application.Services;
 
@@ -10,11 +11,13 @@ public class AuthService : IAuthService
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService(IApplicationDbContext context, IJwtTokenService jwtTokenService)
+    public AuthService(IApplicationDbContext context, IJwtTokenService jwtTokenService, ILogger<AuthService> logger)
     {
         _context = context;
         _jwtTokenService = jwtTokenService;
+        _logger = logger;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -30,6 +33,7 @@ public class AuthService : IAuthService
         };
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
+        _logger.LogInformation("New user registered: {Email}", user.Email);
 
         return await IssueTokensAsync(user);
     }
@@ -42,6 +46,7 @@ public class AuthService : IAuthService
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
             throw new UnauthorizedAccessException("Invalid email or password.");
 
+        _logger.LogInformation("User {Email} logged in", user.Email);
         return await IssueTokensAsync(user);
     }
 

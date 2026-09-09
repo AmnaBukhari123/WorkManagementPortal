@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using EnterpriseWorkManagementPortal.Infrastructure;
+using EnterpriseWorkManagementPortal.Infrastructure.Persistence;
 using EnterpriseWorkManagementPortal.Application;
 using EnterpriseWorkManagementPortal.API.Filters;
 using EnterpriseWorkManagementPortal.API.Middleware;
@@ -85,6 +86,8 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = 429;
 });
 
+builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -101,6 +104,7 @@ app.UseMiddleware<CurrentUserMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.Run();
 
