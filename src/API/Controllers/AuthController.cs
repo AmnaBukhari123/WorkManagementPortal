@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EnterpriseWorkManagementPortal.Application.Interfaces;
 using EnterpriseWorkManagementPortal.Application.DTOs;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EnterpriseWorkManagementPortal.API.Controllers;
 
@@ -18,6 +19,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register(RegisterDto dto) => Ok(await _authService.RegisterAsync(dto));
 
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> Login(LoginDto dto) => Ok(await _authService.LoginAsync(dto));
 
     [HttpPost("refresh")]

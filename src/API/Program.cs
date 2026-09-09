@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using EnterpriseWorkManagementPortal.Infrastructure;
@@ -45,6 +46,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// --- CORS ---
+builder.Services.AddCors(options =>
+    options.AddPolicy("AllowAngular", policy =>
+        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -67,12 +73,28 @@ builder.Services.AddAuthorization(options =>
         .RequireAuthenticatedUser().Build();
 });
 
+// --- Rate Limiting ---
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("login", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = 429;
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<SecureHeadersMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("AllowAngular");
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseMiddleware<CurrentUserMiddleware>();
