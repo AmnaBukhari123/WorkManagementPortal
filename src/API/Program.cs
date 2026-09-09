@@ -1,3 +1,4 @@
+using EnterpriseWorkManagementPortal.API.Middleware;
 using EnterpriseWorkManagementPortal.Infrastructure;
 using EnterpriseWorkManagementPortal.Application;
 using EnterpriseWorkManagementPortal.API.Filters;
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
