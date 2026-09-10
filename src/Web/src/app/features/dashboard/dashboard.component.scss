@@ -1,0 +1,95 @@
+// src/Web/src/app/features/dashboard/dashboard.component.scss
+.loading-state {
+  padding: 3rem;
+  text-align: center;
+  color: #71717a;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+  p { color: #71717a; margin: 0; }
+
+  .btn-primary {
+    background-color: #6366f1;
+    border: none;
+    border-radius: 6px;
+    padding: 0.55rem 1rem;
+    font-weight: 600;
+  }
+}
+
+.stat-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+
+  .stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+
+    &.projects { background: #ede9fe; }
+    &.tasks { background: #dbeafe; }
+    &.completed { background: #dcfce7; }
+    &.users { background: #fef3c7; }
+  }
+
+  .stat-label { font-size: 0.8rem; color: #71717a; display: block; }
+  h2 { font-size: 1.6rem; font-weight: 700; margin: 0.1rem 0; }
+  small { color: #a1a1aa; }
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+
+  .card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 1rem;
+    h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    p { font-size: 0.82rem; color: #71717a; margin: 0; }
+    a { font-size: 0.85rem; color: #6366f1; text-decoration: none; }
+  }
+}
+
+.project-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f4f4f5;
+  cursor: pointer;
+
+  &:hover { background: #fafafa; }
+  &:last-child { border-bottom: none; }
+
+  .project-info { display: flex; align-items: center; gap: 0.75rem; }
+
+  .project-avatar {
+    width: 36px; height: 36px;
+    background: #6366f1;
+    color: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700;
+  }
+
+  strong { display: block; font-size: 0.9rem; }
+  span { font-size: 0.78rem; color: #a1a1aa; }
+}
+
+.task-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}

@@ -1,0 +1,60 @@
+<div class="login-page">
+    <div class="login-card">
+
+        <div class="login-header">
+            <div class="logo">
+                WM
+            </div>
+
+            <h1>Welcome back</h1>
+            <p>Sign in to your Work Management Portal</p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+
+                <input id="email" type="email" class="form-control" formControlName="email"
+                    placeholder="Enter your email" />
+
+                @if (form.controls.email.touched && form.controls.email.invalid) {
+                <small class="field-error">
+                    Please enter a valid email address.
+                </small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input id="password" [type]="showPassword() ? 'text' : 'password'" class="form-control"
+                        formControlName="password" placeholder="Enter your password" />
+                    <button type="button" class="toggle-visibility" (click)="showPassword.set(!showPassword())">
+                        {{ showPassword() ? '🙈' : '👁️' }}
+                    </button>
+                </div>
+                @if (form.controls.password.touched && form.controls.password.invalid) {
+                <small class="field-error">Password is required.</small>
+                }
+            </div>
+
+            @if (errorMessage) {
+            <div class="alert alert-danger">
+                {{ errorMessage }}
+            </div>
+            }
+
+            <button type="submit" class="btn btn-primary login-button" [disabled]="form.invalid">
+                Sign In
+            </button>
+
+        </form>
+
+        <div class="login-footer">
+            <span>Don't have an account?</span>
+            <a routerLink="/register">Create an account</a>
+        </div>
+
+    </div>
+</div>
