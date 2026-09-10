@@ -1,0 +1,60 @@
+<!-- src/Web/src/app/features/auth/register/register.component.html -->
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">WM</div>
+      <h1>Create an account</h1>
+      <p>Sign up to start managing your work</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="fullName">Full name</label>
+        <input id="fullName" type="text" class="form-control" formControlName="fullName" placeholder="Enter your full name" />
+        @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+          <small class="field-error">Full name is required.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input id="email" type="email" class="form-control" formControlName="email" placeholder="Enter your email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <small class="field-error">Please enter a valid email address.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            class="form-control"
+            formControlName="password"
+            placeholder="At least 8 characters"
+          />
+          <button type="button" class="toggle-visibility" (click)="showPassword.set(!showPassword())">
+            {{ showPassword() ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-error">Password must be at least 8 characters.</small>
+        }
+      </div>
+
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+      }
+
+      <button type="submit" class="btn btn-primary login-button" [disabled]="form.invalid">
+        Create Account
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <span>Already have an account?</span>
+      <a routerLink="/login">Sign in</a>
+    </div>
+  </div>
+</div>

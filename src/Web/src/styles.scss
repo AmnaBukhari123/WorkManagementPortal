@@ -2,3 +2,32 @@
 @import "bootstrap/scss/bootstrap";
 @import "@coreui/coreui/scss/coreui";
 @import "@coreui/icons/css/all.min.css";
+
+.sidebar {
+  background-color: #1e1e2d !important;
+  width: 240px;
+
+  .sidebar-brand {
+    color: white;
+    font-weight: 700;
+    padding: 1.25rem 1rem;
+    font-size: 1rem;
+  }
+
+  .nav-link {
+    color: #a1a5b7 !important;
+    padding: 0.7rem 1.25rem;
+    border-radius: 6px;
+    margin: 0.15rem 0.6rem;
+    font-size: 0.9rem;
+
+    &:hover, &.active {
+      background-color: #2b2b40;
+      color: white !important;
+    }
+  }
+}
+
+.wrapper {
+  margin-left: 240px;
+}
